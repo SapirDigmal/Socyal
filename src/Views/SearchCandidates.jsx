@@ -21,6 +21,7 @@ export default function SearchCandidates () {
     const [relationFirst, setRelationFirst] = useState(false)
     const [relationSecond, setRelationSecond] = useState(false)
     const [tableData, setTableData] = useState([])
+    const [isTable, setIsTable] = useState(false)
     const [isTableLoading, setTableLoading] = useState(false)
 
     const handleSelectedRoles = (vals, idx) => {
@@ -48,20 +49,34 @@ export default function SearchCandidates () {
         })
     }
     const search = () => {
-        debugger
+        
         console.log({selectedRoles, selectedSkills, totalExp, relationFirst, relationSecond})
         
         // set loader
         setTableLoading(true)
         // fetch data
-        axios.get("").then(data => {
+        const params = {
+            filters: {
+                second: relationSecond,
+                first: relationFirst,
+                skills: selectedSkills.map(({title})=> title),
+                years: Number(totalExp),
+                role: selectedRoles.map(({titles, exp}) => ({role_titles: titles.map(({title}) => title), years: Number(exp)})) 
+            }
+        }
+        axios.post("http://localhost:3005/v0/profiles", params).then(data => {
             setTableLoading(false)
-            setTableData(data)
+            const newData = data.data.map((person)=> {
+                const skills = String(person.skills)
+                return {...person, jobs: person.jobs.map(({title})=> title), skills: skills.substring(1, skills.length -1), employee: person.employee.split('_').join(' ')}
+            })
+            setTableData(newData)
+            setIsTable(true)
         })
     }
 
     const send = () => {
-        axios.get("").then(_ => {})
+        axios.post("http://localhost:3005/v0/send_slack_message").then(_ => console.log("success"))
     }
 
     return (<>
@@ -83,7 +98,7 @@ export default function SearchCandidates () {
                     </IconButton>
                 }
                 {
-                    idx !== selectedRoles.length - 1 && 
+                    selectedRoles.length !== 1 && 
                     <IconButton size="large" onClick={removeRoles}>
                         <RemoveIcon fontSize="inherit"/>
                     </IconButton>
@@ -116,7 +131,7 @@ export default function SearchCandidates () {
     }
     </div>
     {
-        tableData.length > 0 && <DataGridDemo rows={tableData}></DataGridDemo>
+        isTable && <DataGridDemo rows={tableData}></DataGridDemo>
 
     }
     </>)

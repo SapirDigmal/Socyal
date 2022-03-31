@@ -2,28 +2,38 @@ import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
-  { field: 'name', headerName: 'Name', width: 150 },
+  { field: 'name', headerName: 'Name', width: 150, headerClassName: 'table-header' },
   {
-    field: 'referrer',
+    field: 'employee',
     headerName: 'Cynerio Friend',
     width: 150,
+    headerClassName: 'super-app-theme--header'
   },
   {
     field: 'link',
     headerName: 'Link',
-    width: 100,
+    width: 400,
+    headerClassName: 'super-app-theme--header'
   },
   {
     field: 'jobs',
     headerName: 'Jobs',
-    width: 200,
+    width: 300,
+    headerClassName: 'super-app-theme--header',
+  },
+  {
+    field: 'skills',
+    headerName: 'Skills',
+    width: 300,
+    headerClassName: 'super-app-theme--header',
   },
   {
     field: 'status',
     headerName: 'Status',
     width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    headerClassName: 'super-app-theme--header',
+
+    valueGetter: (params) => 'New',
   },
 ];
 
@@ -40,8 +50,12 @@ const rows = [
 ];
 
 export default function DataGridDemo({rows}) {
+  React.useEffect(()=>{
+    
+    console.log(rows)
+  })
   return (
-    <div style={{ height: 500, width: '100%' }}>
+    <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -49,6 +63,15 @@ export default function DataGridDemo({rows}) {
         rowsPerPageOptions={[5]}
         checkboxSelection
         disableSelectionOnClick
+        sx={{
+          boxShadow: 2,
+          border: 2,
+          borderColor: 'primary.light',
+          '& .MuiDataGrid-cell:hover': {
+            color: 'primary.main',
+          },
+          fontFamily:`"Source Sans Pro", sans-serif`
+        }}
       />
     </div>
   );

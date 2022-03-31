@@ -9,7 +9,7 @@
 }
 
 .app-header {
-  /* background-color: #282c34; */
+  background-color: #e3e9f3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,12 +39,14 @@
 
 body {
   /* background-image: url("/src/Assets/image.png"); */
+  background-color: #e3e9f3;
+
 }
 
 .search {
   position:relative;
   margin: 8px;
-  min-height: 300px;
+  min-height: 250px;
 }
 
 .center {
@@ -54,4 +56,13 @@ body {
   left: 50%;
   /* bring your own prefixes */
   transform: translate(-50%, -50%); 
+}
+
+.table-header {
+  font-weight: 900;
+}
+
+.MuiDataGrid-columnHeaderTitle{
+  font-weight: bolder;
+  color: #4f98d4;
 }
